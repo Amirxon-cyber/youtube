@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Всё о YouTube</title>
+  <style>
+    :root {
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      --bg: #f6f6f9;
+      --surface: #ffffff;
+      --text: #17171b;
+      --muted: #62626d;
+      --line: #e4e4ec;
+      --accent: #ff1f3d;
+      --accent-soft: #ffe8ec;
+      --good: #14a05a;
+      --good-soft: #e3f6ec;
+      --bad: #d9480f;
+      --bad-soft: #fdece3;
+      --shadow: 0 10px 30px rgba(20, 20, 40, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0e0e11;
+        --surface: #18181d;
+        --text: #f3f3f6;
+        --muted: #a3a3b0;
+        --line: #2b2b33;
+        --accent: #ff4560;
+        --accent-soft: #2a1519;
+        --good: #3ddc84;
+        --good-soft: #14261d;
+        --bad: #ff8a4c;
+        --bad-soft: #2a1b12;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0e0e11;
+      --surface: #18181d;
+      --text: #f3f3f6;
+      --muted: #a3a3b0;
+      --line: #2b2b33;
+      --accent: #ff4560;
+      --accent-soft: #2a1519;
+      --good: #3ddc84;
+      --good-soft: #14261d;
+      --bad: #ff8a4c;
+      --bad-soft: #2a1b12;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 70px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: env(safe-area-inset-top, 0px);
+      background: var(--surface);
+      z-index: 20;
+    }
+
+    nav {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 19;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-right: auto;
+    }
+
+    .logo i {
+      width: 34px;
+      height: 24px;
+      border-radius: 7px;
+      background: var(--accent);
+      display: grid;
+      place-items: center;
+    }
+
+    .logo i::after {
+      content: "";
+      border-left: 9px solid #fff;
+      border-top: 5.5px solid transparent;
+      border-bottom: 5.5px solid transparent;
+      margin-left: 2px;
+    }
+
+    .links {
+      display: flex;
+      gap: 18px;
+    }
+
+    .links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .links a:hover {
+      color: var(--accent);
+    }
+
+    .ibtn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .burger {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      .burger {
+        display: grid;
+      }
+
+      .links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      .links.open {
+        display: flex;
+      }
+
+      .links a {
+        padding: 14px 20px;
+        border-top: 1px solid var(--line);
+        font-size: 16px;
+      }
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    .hero {
+      padding: 64px 0 40px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 8vw, 70px);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      margin: 20px 0 16px;
+      font-weight: 850;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: clamp(16px, 2.4vw, 20px);
+      max-width: 640px;
+      margin: 0 auto 28px;
+    }
+
+    .cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 26px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 0;
+      font-size: 16px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 10px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 28px;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    section {
+      padding: 52px 0;
+    }
+
+    h2 {
+      font-size: clamp(26px, 5vw, 38px);
+      letter-spacing: -0.03em;
+      margin: 0 0 8px;
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 0 0 28px;
+      max-width: 640px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .card .ico {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      padding-left: 26px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--line);
+    }
+
+    .tl {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .tl::before {
+      content: "";
+      position: absolute;
+      left: -26px;
+      top: 22px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid var(--bg);
+    }
+
+    .tl b {
+      color: var(--accent);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+    }
+
+    .col {
+      border-radius: 22px;
+      padding: 26px;
+      border: 1px solid var(--line);
+    }
+
+    .col.good {
+      background: var(--good-soft);
+    }
+
+    .col.bad {
+      background: var(--bad-soft);
+    }
+
+    .col h3 {
+      margin: 0 0 16px;
+      font-size: 22px;
+    }
+
+    .col.good h3 {
+      color: var(--good);
+    }
+
+    .col.bad h3 {
+      color: var(--bad);
+    }
+
+    .col ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .col li {
+      padding-left: 28px;
+      position: relative;
+    }
+
+    .col.good li::before {
+      content: "✓";
+      color: var(--good);
+      position: absolute;
+      left: 0;
+      font-weight: 800;
+    }
+
+    .col.bad li::before {
+      content: "✕";
+      color: var(--bad);
+      position: absolute;
+      left: 0;
+      font-weight: 800;
+    }
+
+    .money {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .ways {
+      display: grid;
+      gap: 12px;
+    }
+
+    .way {
+      display: flex;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .way b {
+      display: block;
+    }
+
+    .way span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .way .n {
+      flex: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .calc {
+      background: var(--surface);
+      border: 2px solid var(--accent);
+      border-radius: 22px;
+      padding: 24px;
+    }
+
+    .calc h3 {
+      margin: 0 0 4px;
+      font-size: 21px;
+    }
+
+    .calc small,
+    .note {
+      color: var(--muted);
+    }
+
+    .field {
+      margin-top: 22px;
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .field output {
+      color: var(--accent);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--accent-soft);
+      text-align: center;
+    }
+
+    .result b {
+      display: block;
+      font-size: clamp(32px, 7vw, 44px);
+      color: var(--accent);
+      letter-spacing: -0.03em;
+    }
+
+    .result span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .note {
+      margin-top: 14px;
+      font-size: 13px;
+    }
+
+    .tabs,
+    .ideas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .chip {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .chip.on {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .ch {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .ch:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .ch .top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ch .av {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      flex: none;
+    }
+
+    .ch b {
+      font-size: 17px;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+
+    .tag.u {
+      background: var(--good-soft);
+      color: var(--good);
+    }
+
+    .tag.e {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .ch p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .ch .go {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-top: auto;
+    }
+
+    .searchrow {
+      margin-top: 28px;
+    }
+
+    .searchrow h3 {
+      margin: 0 0 12px;
+    }
+
+    .chip.link {
+      text-decoration: none;
+    }
+
+    .steps {
+      counter-reset: s;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .step {
+      counter-increment: s;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .step::before {
+      content: counter(s);
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .step h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+    }
+
+    .idea h3 {
+      margin: 0 0 6px;
+    }
+
+    .idea p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: var(--line);
+      overflow: hidden;
+      margin: 14px 0 18px;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .checks {
+      display: grid;
+      gap: 10px;
+    }
+
+    .checks label {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--bg);
+    }
+
+    .checks input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+      flex: none;
+    }
+
+    .q h3 {
+      margin: 0 0 14px;
+      font-size: 19px;
+    }
+
+    .opts {
+      display: grid;
+      gap: 10px;
+    }
+
+    .opt {
+      text-align: left;
+      padding: 13px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .opt.ok {
+      background: var(--good-soft);
+      border-color: var(--good);
+    }
+
+    .opt.no {
+      background: var(--bad-soft);
+      border-color: var(--bad);
+    }
+
+    .qmeta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .final {
+      text-align: center;
+    }
+
+    .final b {
+      font-size: 44px;
+      color: var(--accent);
+      display: block;
+    }
+
+    details {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    details p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px 56px;
+      color: var(--muted);
+      font-size: 14px;
+      border-top: 1px solid var(--line);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo"><i></i>Всё о YouTube</div>
+    <div class="links" id="links">
+      <a href="#why">Зачем</a>
+      <a href="#history">История</a>
+      <a href="#prosCons">Плюсы и минусы</a>
+      <a href="#money">Заработок</a>
+      <a href="#channels">Каналы</a>
+      <a href="#start">Старт</a>
+      <a href="#quiz">Квиз</a>
+      <a href="#faq">Вопросы</a>
+    </div>
+    <button class="ibtn" id="theme" aria-label="Сменить тему">🌙</button>
+    <button class="ibtn burger" id="burger" aria-label="Меню">☰</button>
+  </nav>
+
+  <div class="wrap">
+    <header class="hero">
+      <span class="badge">Разбираемся честно</span>
+      <h1>YouTube: <span>стоит ли</span> заходить на платформу?</h1>
+      <p>Для чего он нужен, какие у него плюсы и минусы, можно ли на нём зарабатывать и какие каналы стоит посмотреть.
+      </p>
+      <div class="cta">
+        <a class="btn" href="#money">Посчитать доход</a>
+        <a class="btn ghost" href="#channels">Что посмотреть</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>2+ млрд</b><span>зрителей в месяц</span></div>
+        <div class="stat"><b>100+</b><span>стран</span></div>
+        <div class="stat"><b>2005</b><span>год основания</span></div>
+        <div class="stat"><b>№2</b><span>по популярности среди сайтов</span></div>
+      </div>
+    </header>
+
+    <section id="why">
+      <h2>Зачем нужен YouTube</h2>
+      <p class="lead">Это не только развлечения. Платформа стала местом, где учатся, работают и строят бренды.</p>
+      <div class="grid">
+        <div class="card"><span class="ico">🎓</span>
+          <h3>Учёба</h3>
+          <p>Уроки по программированию, языкам и математике бесплатно и в любое время.</p>
+        </div>
+        <div class="card"><span class="ico">🎬</span>
+          <h3>Развлечения</h3>
+          <p>Игры, музыка, юмор, фильмы и стримы на любой вкус.</p>
+        </div>
+        <div class="card"><span class="ico">💼</span>
+          <h3>Бизнес и бренд</h3>
+          <p>Компании и эксперты находят клиентов, показывая свою работу на видео.</p>
+        </div>
+        <div class="card"><span class="ico">🌍</span>
+          <h3>Новости и мнения</h3>
+          <p>Прямые эфиры и разборы событий от людей со всего мира.</p>
+        </div>
+        <div class="card"><span class="ico">🎨</span>
+          <h3>Самовыражение</h3>
+          <p>Любой человек может показать творчество и найти свою аудиторию.</p>
+        </div>
+        <div class="card"><span class="ico">🛠️</span>
+          <h3>Инструкции</h3>
+          <p>Как починить, собрать, приготовить или настроить: ответ почти всегда есть в видео.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="history">
+      <h2>Коротко об истории</h2>
+      <p class="lead">Как платформа выросла из одного ролика про зоопарк.</p>
+      <div class="timeline">
+        <div class="tl"><b>2005</b> — основан YouTube, а первое видео «Me at the zoo» выложено в апреле.</div>
+        <div class="tl"><b>2006</b> — компанию покупает Google.</div>
+        <div class="tl"><b>2007</b> — запускается партнёрская программа: авторы начинают получать деньги с рекламы.
+        </div>
+        <div class="tl"><b>2020</b> — появляются короткие вертикальные видео Shorts.</div>
+      </div>
+    </section>
+
+    <section id="prosCons">
+      <h2>Хорошая и плохая стороны</h2>
+      <p class="lead">У любой платформы есть две стороны. Лучше знать обе заранее.</p>
+      <div class="split">
+        <div class="col good">
+          <h3>Что хорошо</h3>
+          <ul>
+            <li>Огромный выбор бесплатного обучающего контента</li>
+            <li>Любой человек может стать автором без дорогого оборудования</li>
+            <li>Видео находят через поиск годами, а не только в день выхода</li>
+            <li>Есть возможность заработка и личного бренда</li>
+            <li>Развиваются навыки: съёмка, монтаж, речь, дизайн</li>
+          </ul>
+        </div>
+        <div class="col bad">
+          <h3>Что плохо</h3>
+          <ul>
+            <li>Сильная конкуренция, новичка трудно заметить</li>
+            <li>Много времени уходит на просмотр вместо дел</li>
+            <li>Реклама, кликбейт и недостоверная информация</li>
+            <li>Автор зависит от алгоритмов и правил платформы</li>
+            <li>Рост канала идёт медленно, нужно терпение</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="money">
+      <h2>Можно ли заработать на YouTube?</h2>
+      <p class="lead">Да, но не сразу и не всем. Доход зависит от просмотров, тематики и аудитории.</p>
+      <div class="money">
+        <div class="ways">
+          <div class="way">
+            <div class="n">1</div>
+            <div><b>Реклама на видео</b><span>Партнёрская программа YouTube: нужны подписчики и часы просмотра. Условия
+                и доступность зависят от страны, их стоит проверить в YouTube Studio.</span></div>
+          </div>
+          <div class="way">
+            <div class="n">2</div>
+            <div><b>Спонсорство и интеграции</b><span>Бренды платят за упоминание своего продукта в видео.</span></div>
+          </div>
+          <div class="way">
+            <div class="n">3</div>
+            <div><b>Партнёрские ссылки</b><span>Вы рекомендуете товар и получаете процент с покупок.</span></div>
+          </div>
+          <div class="way">
+            <div class="n">4</div>
+            <div><b>Свои товары и услуги</b><span>Курсы, мерч, консультации: часто самый прибыльный способ.</span></div>
+          </div>
+          <div class="way">
+            <div class="n">5</div>
+            <div><b>Поддержка зрителей</b><span>Донаты, платные подписки на канал и стримы.</span></div>
+          </div>
+        </div>
+        <div class="calc">
+          <h3>Калькулятор дохода</h3>
+          <small>Примерная оценка от рекламы, а не гарантия</small>
+          <div class="field">
+            <label for="views">Просмотров в месяц <output id="viewsOut"></output></label>
+            <input id="views" type="range" min="1000" max="1000000" step="1000" value="50000">
+          </div>
+          <div class="field">
+            <label for="rpm">Доход на 1000 просмотров <output id="rpmOut"></output></label>
+            <input id="rpm" type="range" min="0.3" max="6" step="0.1" value="1.5">
+          </div>
+          <div class="result">
+            <b id="month">$0</b>
+            <span>в месяц, а за год: <strong id="year">$0</strong></span>
+          </div>
+          <p class="note">Реальный доход сильно зависит от страны зрителей и темы канала. Образовательные и финансовые
+            темы обычно платят больше игровых.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="channels">
+      <h2>Что посмотреть</h2>
+      <p class="lead">Подборка известных каналов: полезные для учёбы и развлекательные для отдыха. Нажмите на карточку,
+        и канал откроется на YouTube.</p>
+      <div class="tabs" id="tabs"></div>
+      <div class="grid" id="chgrid"></div>
+      <div class="searchrow">
+        <h3>Найти ролики по теме</h3>
+        <div class="ideas" id="searches"></div>
+      </div>
+    </section>
+
+    <section id="start">
+      <h2>С чего начать</h2>
+      <p class="lead">Четыре простых шага, чтобы первое видео вышло уже на этой неделе.</p>
+      <div class="steps">
+        <div class="step">
+          <h3>Выберите тему</h3>
+          <p>То, что вам интересно и в чём вы можете разбираться долго.</p>
+        </div>
+        <div class="step">
+          <h3>Снимите первое видео</h3>
+          <p>Телефона и тихого места достаточно. Идеальное качество придёт потом.</p>
+        </div>
+        <div class="step">
+          <h3>Оформите канал</h3>
+          <p>Название, аватар, обложки и понятное описание.</p>
+        </div>
+        <div class="step">
+          <h3>Выпускайте регулярно</h3>
+          <p>Постоянство важнее удачи. Смотрите, что нравится зрителям.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ideas">
+      <h2>Подбор идеи для канала</h2>
+      <p class="lead">Выберите, что вам ближе, и получите идею для старта.</p>
+      <div class="ideas" id="chips"></div>
+      <div class="panel idea" id="idea"></div>
+    </section>
+
+    <section id="plan">
+      <h2>Чек-лист будущего ютубера</h2>
+      <p class="lead">Отмечайте выполненное и следите за прогрессом.</p>
+      <div class="panel">
+        <strong id="pct">0%</strong> готовности
+        <div class="bar"><i id="fill"></i></div>
+        <div class="checks" id="checks"></div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Мини-квиз</h2>
+      <p class="lead">Проверьте, что вы запомнили.</p>
+      <div class="panel" id="quizBox"></div>
+    </section>
+
+    <section id="faq">
+      <h2>Частые вопросы</h2>
+      <details>
+        <summary>Нужна ли дорогая камера?</summary>
+        <p>Нет. Для начала хватит телефона, хорошего света и чистого звука. Звук для зрителя важнее картинки.</p>
+      </details>
+      <details>
+        <summary>Сколько ждать результата?</summary>
+        <p>Обычно первые месяцы просмотров почти нет. Рост чаще появляется после десятков роликов, поэтому нужны
+          терпение и регулярность.</p>
+      </details>
+      <details>
+        <summary>Можно ли без показа лица?</summary>
+        <p>Да. Многие каналы строятся на записи экрана, озвучке, анимации или обзорах без лица.</p>
+      </details>
+      <details>
+        <summary>Что с авторскими правами?</summary>
+        <p>Используйте свою музыку и видео либо материалы с разрешённой лицензией. Чужой контент без разрешения может
+          привести к блокировке ролика.</p>
+      </details>
+    </section>
+  </div>
+
+  <footer>Сайт сделан в учебных целях. Условия монетизации YouTube меняются, проверяйте их на официальной странице.
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const themeBtn = document.getElementById('theme');
+
+    function applyTheme(t) {
+      root.setAttribute('data-theme', t);
+      themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+    }
+    let saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) { }
+    applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+    themeBtn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem('theme', next); } catch (e) { }
+    });
+
+    const links = document.getElementById('links');
+    document.getElementById('burger').addEventListener('click', () => links.classList.toggle('open'));
+    links.addEventListener('click', e => { if (e.target.tagName === 'A') links.classList.remove('open'); });
+
+    const views = document.getElementById('views');
+    const rpm = document.getElementById('rpm');
+    function calc() {
+      const v = Number(views.value);
+      const r = Number(rpm.value);
+      const month = (v / 1000) * r * 0.55;
+      const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+      document.getElementById('viewsOut').textContent = v.toLocaleString('ru-RU');
+      document.getElementById('rpmOut').textContent = '$' + r.toFixed(1);
+      document.getElementById('month').textContent = fmt(month);
+      document.getElementById('year').textContent = fmt(month * 12);
+    }
+    views.addEventListener('input', calc);
+    rpm.addEventListener('input', calc);
+    calc();
+
+    const channels = [
+      { n: 'freeCodeCamp', h: 'freecodecamp', t: 'u', e: '💻', d: 'Длинные бесплатные курсы по программированию, от HTML до Python.' },
+      { n: 'Fireship', h: 'Fireship', t: 'u', e: '🔥', d: 'Быстрые и яркие разборы технологий и языков программирования.' },
+      { n: '3Blue1Brown', h: '3blue1brown', t: 'u', e: '📐', d: 'Математика, объяснённая красивой анимацией.' },
+      { n: 'Khan Academy', h: 'khanacademy', t: 'u', e: '🧠', d: 'Школьные и университетские предметы в понятных уроках.' },
+      { n: 'TED-Ed', h: 'TEDEd', t: 'u', e: '💡', d: 'Короткие анимированные уроки на самые разные темы.' },
+      { n: 'Kurzgesagt', h: 'kurzgesagt', t: 'u', e: '🌌', d: 'Наука, космос и большие вопросы в стильной анимации.' },
+      { n: 'Veritasium', h: 'veritasium', t: 'u', e: '⚗️', d: 'Эксперименты и истории о том, как устроен мир.' },
+      { n: 'MrBeast', h: 'MrBeast', t: 'e', e: '🏆', d: 'Масштабные челленджи и конкурсы с огромными призами.' },
+      { n: 'Mark Rober', h: 'MarkRober', t: 'e', e: '🚀', d: 'Инженерные эксперименты и изобретения, которые приятно смотреть.' },
+      { n: 'Vsauce', h: 'vsauce', t: 'e', e: '🤯', d: 'Необычные вопросы о мире, от которых захватывает дух.' },
+      { n: 'Dude Perfect', h: 'DudePerfect', t: 'e', e: '🎯', d: 'Трюки, спорт и соревнования с друзьями.' },
+      { n: 'PewDiePie', h: 'PewDiePie', t: 'e', e: '🎮', d: 'Игры, мемы и юмор от одного из самых известных авторов.' }
+    ];
+    const tabNames = { all: 'Все', u: 'Полезные', e: 'Развлекательные' };
+    const tabs = document.getElementById('tabs');
+    const chgrid = document.getElementById('chgrid');
+
+    function showChannels(k) {
+      tabs.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.k === k));
+      chgrid.innerHTML = '';
+      channels.filter(c => k === 'all' || c.t === k).forEach(c => {
+        const a = document.createElement('a');
+        a.className = 'ch';
+        a.href = 'https://www.youtube.com/@' + c.h;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.innerHTML = '<div class="top"><div class="av"></div><b></b></div><span class="tag"></span><p></p><span class="go">Открыть канал →</span>';
+        a.querySelector('.av').textContent = c.e;
+        a.querySelector('b').textContent = c.n;
+        const tag = a.querySelector('.tag');
+        tag.textContent = c.t === 'u' ? 'Полезное' : 'Развлечения';
+        tag.classList.add(c.t);
+        a.querySelector('p').textContent = c.d;
+        chgrid.appendChild(a);
+      });
+    }
+    Object.keys(tabNames).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.dataset.k = k;
+      b.textContent = tabNames[k];
+      b.addEventListener('click', () => showChannels(k));
+      tabs.appendChild(b);
+    });
+    showChannels('all');
+
+    const searches = ['Как начать канал на YouTube', 'HTML и CSS для новичков', 'JavaScript с нуля', 'Монтаж видео для начинающих', 'Как снимать на телефон', 'Смешные видео'];
+    const sbox = document.getElementById('searches');
+    searches.forEach(s => {
+      const a = document.createElement('a');
+      a.className = 'chip link';
+      a.href = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(s);
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = '🔎 ' + s;
+      sbox.appendChild(a);
+    });
+
+    const ideas = {
+      'Игры': ['Прохождения и обзоры', 'Снимайте прохождения любимых игр с живыми комментариями или делайте короткие обзоры новинок.'],
+      'Программирование': ['Уроки для новичков', 'Разбирайте HTML, CSS и JavaScript на маленьких проектах и показывайте процесс с нуля.'],
+      'Музыка': ['Каверы и разборы', 'Играйте каверы, объясняйте аккорды или показывайте, как создаётся трек.'],
+      'Путешествия': ['Влоги из городов', 'Показывайте свой город глазами местного: еда, места и советы туристам.'],
+      'Юмор': ['Короткие скетчи', 'Снимайте короткие сценки на телефон и выкладывайте их в Shorts.'],
+      'Образование': ['Объясняю за минуту', 'Простые объяснения сложных тем в формате короткого видео.']
+    };
+    const chips = document.getElementById('chips');
+    const box = document.getElementById('idea');
+    function showIdea(name) {
+      chips.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.textContent === name));
+      box.innerHTML = '<h3></h3><p></p>';
+      box.querySelector('h3').textContent = ideas[name][0];
+      box.querySelector('p').textContent = ideas[name][1];
+    }
+    Object.keys(ideas).forEach(name => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = name;
+      b.addEventListener('click', () => showIdea(name));
+      chips.appendChild(b);
+    });
+    showIdea('Игры');
+
+    const tasks = ['Выбрать тему канала', 'Придумать название', 'Сделать аватар и обложку', 'Снять первое видео', 'Записать чистый звук', 'Придумать цепляющее название и превью', 'Выложить 5 видео'];
+    const checks = document.getElementById('checks');
+    const fill = document.getElementById('fill');
+    const pct = document.getElementById('pct');
+    function progress() {
+      const all = checks.querySelectorAll('input');
+      const done = checks.querySelectorAll('input:checked').length;
+      const p = Math.round((done / all.length) * 100);
+      fill.style.width = p + '%';
+      pct.textContent = p + '%';
+    }
+    tasks.forEach(t => {
+      const l = document.createElement('label');
+      l.innerHTML = '<input type="checkbox"><span></span>';
+      l.querySelector('span').textContent = t;
+      l.querySelector('input').addEventListener('change', progress);
+      checks.appendChild(l);
+    });
+
+    const quiz = [
+      { q: 'В каком году основан YouTube?', o: ['2003', '2005', '2010'], a: 1 },
+      { q: 'Как называется самое первое видео на YouTube?', o: ['Me at the zoo', 'Hello world', 'My first day'], a: 0 },
+      { q: 'Какая компания купила YouTube в 2006 году?', o: ['Microsoft', 'Apple', 'Google'], a: 2 },
+      { q: 'Как называются короткие вертикальные видео на YouTube?', o: ['Reels', 'Shorts', 'Stories'], a: 1 }
+    ];
+    const qbox = document.getElementById('quizBox');
+    let qi = 0;
+    let score = 0;
+    function renderQ() {
+      if (qi >= quiz.length) {
+        qbox.innerHTML = '<div class="final"><b></b><p></p><button class="btn">Пройти ещё раз</button></div>';
+        qbox.querySelector('b').textContent = score + ' из ' + quiz.length;
+        qbox.querySelector('p').textContent = score === quiz.length ? 'Отлично, вы всё запомнили!' : 'Хороший результат, можно попробовать ещё раз.';
+        qbox.querySelector('.btn').addEventListener('click', () => { qi = 0; score = 0; renderQ(); });
+        return;
+      }
+      const cur = quiz[qi];
+      qbox.innerHTML = '<div class="q"><div class="qmeta"></div><h3></h3><div class="opts"></div></div>';
+      qbox.querySelector('.qmeta').textContent = 'Вопрос ' + (qi + 1) + ' из ' + quiz.length;
+      qbox.querySelector('h3').textContent = cur.q;
+      const opts = qbox.querySelector('.opts');
+      cur.o.forEach((text, i) => {
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.textContent = text;
+        b.addEventListener('click', () => {
+          opts.querySelectorAll('.opt').forEach((x, j) => {
+            x.disabled = true;
+            if (j === cur.a) x.classList.add('ok');
+          });
+          if (i === cur.a) score++;
+          else b.classList.add('no');
+          setTimeout(() => { qi++; renderQ(); }, 900);
+        });
+        opts.appendChild(b);
+      });
+    }
+    renderQ();
+  </script>
+</body>
+
+</html>
